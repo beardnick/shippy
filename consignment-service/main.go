@@ -68,7 +68,7 @@ func main() {
 		micro.Name("micro.srv.consignment"),
 		micro.Version("latest"),
 	)
-	vesselClient := vesselpb.NewVesselServiceClient("micro.srv.vessel", srv.Client())
+	vesselClient := vesselpb.NewVesselServiceClient("micro.srv.vessel-service", srv.Client())
 	srv.Init()
 	consignment.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
 	if err := srv.Run(); err != nil {
