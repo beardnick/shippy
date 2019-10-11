@@ -1,0 +1,15 @@
+# log file
+*.log
+
+# vim file
+.vim
+
+
+
+.DS_Store
+
+# idea vscode file
+.idea/
+.vscode/
+*.code-workspace
+
