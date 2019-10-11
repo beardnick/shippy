@@ -1,4 +1,4 @@
-module github.com/beardnick/shippy
+module github.com/beardnick/shippy/vessel-service
 
 go 1.12
 

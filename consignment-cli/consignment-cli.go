@@ -8,7 +8,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	pb "shippy/consignment-service/proto/consignment"
+
+	pb "github.com/beardnick/shippy/consignment-service/proto/consignment"
 
 	microclient "github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/config/cmd"
