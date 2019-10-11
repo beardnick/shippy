@@ -3,11 +3,9 @@ package main
 import (
 	"context"
 	"log"
-	"net"
 	"shippy/consignment-service/proto/consignment"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+	micro "github.com/micro/go-micro"
 )
 
 var (
@@ -34,29 +32,33 @@ type service struct {
 	repo *Repository
 }
 
-func (s *service) CreateConsignment(ctx context.Context, cons *consignment.Consignment) (*consignment.Response, error) {
+func (s *service) CreateConsignment(ctx context.Context, cons *consignment.Consignment, resp *consignment.Response) error {
 	_, err := s.repo.Create(cons)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &consignment.Response{Created: true, Consignment: cons}, nil
+	// 注意这样写是错的
+	// resp = &consignment.Response{Created: true, Consignment: cons}
+	*resp = consignment.Response{Created: true, Consignment: cons}
+	return nil
 }
 
-func (s *service) GetConsignment(ctx context.Context, req *consignment.GetRequest) (*consignment.Response, error) {
-	return &consignment.Response{Consignments: s.repo.consignments}, nil
+func (s *service) GetConsignment(ctx context.Context, req *consignment.GetRequest, resp *consignment.Response) error {
+	*resp = consignment.Response{Consignments: s.repo.consignments}
+	return nil
 }
 
-// 这是实现了以grpc的server
+// go-micro的server
 func main() {
 	repo := &Repository{}
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatal("failed to listen", err)
-	}
-	s := grpc.NewServer()
-	consignment.RegisterShippingServiceServer(s, &service{repo})
-	reflection.Register(s)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	// go-micro 使用服务名而非服务的端口来指明服务
+	srv := micro.NewService(
+		micro.Name("micro.srv.consignment"),
+		micro.Version("latest"),
+	)
+	srv.Init()
+	consignment.RegisterShippingServiceHandler(srv.Server(), &service{repo})
+	if err := srv.Run(); err != nil {
+		log.Fatal(err)
 	}
 }
