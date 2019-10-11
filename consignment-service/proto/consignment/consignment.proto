@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+
+// 在生成go文件的时候的包名
+package consignment;
+
+// 这个service将会被生成为我们要实现的一个接口
+service ShippingService {
+  rpc CreateConsignment(Consignment) returns (Response) {}
+  rpc GetConsignment(GetRequest) returns (Response) {}
+}
+
+
+message Container {
+  string id = 1;
+  string customer_id = 2;
+  string origin = 3;
+  string user_id = 4;
+}
+
+message Consignment {
+  string id = 1;
+  string description = 2;
+  int32 weight = 3;
+  repeated Container containers = 4;
+  string vessel = 5;
+}
+
+
+message Response {
+  bool created = 1;
+  Consignment consignment = 2;
+  repeated Consignment consignments = 3;
+}
+
+message GetRequest {
+}

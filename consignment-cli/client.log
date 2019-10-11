@@ -1,0 +1,7 @@
+before dial
+after dial
+before client
+after client
+before parse
+after parse
+2019/10/11 12:29:57 couldn't create consignment: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp [::1]:50051: connect: connection refused"
