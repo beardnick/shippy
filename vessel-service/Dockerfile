@@ -1,5 +1,5 @@
 FROM golang:1.9.0 as builder
-WORKDIR /go/src/github.com/beardnick/shippy/consignment-service
+WORKDIR /go/src/github.com/beardnick/shippy/vessel-service
 COPY . .
 RUN go get -u github.com/golang/dep/cmd/dep
 
@@ -13,5 +13,5 @@ RUN apk --no-cache add ca-certificates
 RUN mkdir /app
 WORKDIR /app
 
-COPY --from=builder /go/src/github.com/beardnick/shippy/consignment-service .
-CMD [ "./consignment-service" ]
+COPY --from=builder /go/src/github.com/beardnick/shippy/vessel-service .
+CMD [ "./vessel-service" ]
