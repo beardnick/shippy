@@ -1,9 +1,19 @@
+FROM golang:1.12.0 as builder
+WORKDIR /go/src/github.com/beardnick/shippy/consignment-cli
+COPY . .
+# RUN go get -u github.com/golang/dep/cmd/dep
+
+# RUN dep init && dep ensure
+ENV GO111MODULE=on
+# RUN go build .
+RUN CGO_ENABLED=0 GOOS=linux go build .
+
 FROM alpine:latest
+
+# RUN apk --no-cache add ca-certificates
 
 RUN mkdir /app
 WORKDIR /app
 
-ADD consignment.json /app/consignment.json
-ADD consignment-cli /app/consignment-cli
-
+COPY --from=builder /go/src/github.com/beardnick/shippy/consignment-cli .
 CMD [ "./consignment-cli" ]

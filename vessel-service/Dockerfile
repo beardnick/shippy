@@ -1,15 +1,13 @@
 FROM golang:1.12.0 as builder
 WORKDIR /go/src/github.com/beardnick/shippy/vessel-service
 COPY . .
-# RUN go get -u github.com/golang/dep/cmd/dep
 
-# RUN dep init && dep ensure
 ENV GO111MODULE=on
 
-RUN GO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
+RUN CGO_ENABLED=0 GOOS=linux go build .
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates
+# RUN apk --no-cache add ca-certificates
 
 RUN mkdir /app
 WORKDIR /app
